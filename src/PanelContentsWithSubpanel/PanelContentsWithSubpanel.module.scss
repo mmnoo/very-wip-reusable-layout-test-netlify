@@ -1,0 +1,17 @@
+.panelContentsWrapper {
+  border: dashed thin green;
+  height: 100%;
+  position: relative;
+}
+.subpanelWrapper {
+  border: solid thin cyan;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  right: calc(
+    -100% - var(--spk-spacing-5)
+  ); // make sure changes here get reflected in component code for widthStylesOverride
+  background: white;
+  box-sizing: border-box;
+  z-index: 1; // ensures stacked on top of map (tested with maplibre)
+}

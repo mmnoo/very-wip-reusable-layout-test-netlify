@@ -1,0 +1,24 @@
+:root {
+  /* just to get started for layout component. Values are just placeholders. Developing a real theme system needs to be a holistic and coordinated endeavour. */
+  /* if we want to use a component theme for a project, we could map it onto these spk theme values */
+  --spk-spacing-1: 2px;
+  --spk-spacing-2: 4px;
+  --spk-spacing-3: 8px;
+  --spk-spacing-4: 16px;
+  --spk-spacing-5: 24px;
+
+  --spk-color-grey-1: #f0f0f0;
+  --spk-color-grey-2: #e0e0e0;
+  --spk-color-grey-3: #d0d0d0;
+  --spk-color-grey-4: #c0c0c0;
+  --spk-color-grey-5: #b0b0b0;
+  --spk-color-grey-6: #a0a0a0;
+  --spk-color-grey-7: #909090;
+  --spk-color-grey-8: #808080;
+  --spk-color-grey-9: #707070;
+  --spk-color-grey-10: #606060;
+
+  --spk-typography-color-deemphasized: var(--spk-color-grey-9);
+
+  --spk-button-tiny-font-size: 1rem;
+}

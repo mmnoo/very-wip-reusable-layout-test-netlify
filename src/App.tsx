@@ -2,9 +2,11 @@ import { LayoutApp } from "./couldBeSharedComponents/LayoutApp/LayoutApp";
 import { LayoutPanels } from "./couldBeSharedComponents/LayoutPanels/LayoutPanels";
 
 import styles from "./App.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PanelContentsWithSubpanel } from "./PanelContentsWithSubpanel/PanelContentsWithSubpanel";
 import { useCloseSubpanelWhenParentPanelCloses } from "./PanelContentsWithSubpanel/useCloseSubpanelWhenParentPanelCloses";
+import { Map } from "./couldBeSharedComponents/Map/Map";
+import { useMap } from "./couldBeSharedComponents/Map/useMap";
 
 function App() {
   const [isLeftPanelOpenOverride, setIsLeftPanelOpenOverride] = useState(false);
@@ -24,7 +26,35 @@ function App() {
     );
 
     setIsLeftPanelOpenOverride((previous) => !previous);
+    // call a map resize handler here if we need to respond to that
   };
+
+  const { mapContainer, mapRef, isMapLoaded } = useMap({
+    center: [-122.4194, 37.7749],
+
+    zoom: 10,
+  });
+
+  useEffect(
+    function exampleMapResizeHandler() {
+      if (!isMapLoaded && !mapRef.current) {
+        // this check is a bit redundant, but isMapLoaded will trigger the effect.
+        // checking for mapRef.current as well is technically correct and doesnt hurt
+        return;
+      }
+      const mapInstance = mapRef.current;
+      const handleMapResize = () => {
+        console.log("resize event");
+      };
+      mapInstance?.on("resize", handleMapResize);
+
+      return () => {
+        mapInstance?.off("resize", handleMapResize);
+      };
+    },
+    [isMapLoaded, mapRef]
+  );
+
   return (
     <LayoutApp headerContent={<>header</>} footerContent={<>footer</>}>
       <LayoutPanels
@@ -33,16 +63,16 @@ function App() {
             isSubpanelOpen={isLeftSubpanelOpen}
             setIsSubpanelOpen={setIsLeftSubpanelOpen}
             subpanelContents={
-              <div style={{ backgroundColor: "lightgreen", height: "100%" }}>
+              <div style={{ backgroundColor: "lightcoral", height: "100%" }}>
                 {/* not saying we should use inline styling here, but emphacizing that subpanel content styling happens by composistion 
 								we'd need to avoid the corner close button from overlapping the contents, but thats not hard so I dont expect it needs a demo
 								*/}
-                subpanel contents
+                optional subpanel contents
               </div>
             }
             mainPanelContents={
               <>
-                Left Panel
+                Optional left Panel
                 <br />
                 <button
                   onClick={() => setIsLeftSubpanelOpen(!isLeftSubpanelOpen)}
@@ -62,13 +92,26 @@ function App() {
             subpanelWidth="200px"
           ></PanelContentsWithSubpanel>
         }
-        rightPanelContent={<>right panel</>}
+        rightPanelContent={<>Optional right panel</>}
         leftPanelWidth="300px"
         setIsLeftPanelOpen={customHandleLeftPanelToggle}
         isLeftPanelOpen={isLeftPanelOpenOverride}
         leftPanelClassName={styles.leftPanelOverride} //override left panel styles to show a possible approach to style overriding
       >
-        <div>map here</div>
+        <div>
+          <Map
+            mapContainer={mapContainer}
+            legend={<div style={{ backgroundColor: "white" }}> legend</div>}
+            additionalControls={
+              <>
+                <button>custom</button>
+                <button>map</button>
+                <button>control</button>
+                <button>container</button>
+              </>
+            }
+          />
+        </div>
       </LayoutPanels>
     </LayoutApp>
   );

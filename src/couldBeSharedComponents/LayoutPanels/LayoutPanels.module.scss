@@ -1,0 +1,35 @@
+.layoutPanelsWrapper {
+  border: solid thin red;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  & > :nth-child(2) {
+    border: solid thick black;
+    flex-grow: 1;
+  }
+}
+.panel {
+  transition: 1s ease-in-out;
+  box-sizing: border-box;
+  position: relative;
+}
+.panelCloseButton {
+  all: unset;
+  background-color: var(--spk-button-background-color-secondary);
+  width: 20px;
+}
+.leftPanelCloseTab {
+  position: absolute;
+  right: -20px;
+  top: 10px;
+  z-index: 1; // ensures stacked on top of map (tested with maplibre)
+  border: solid thin orange;
+}
+.rightPanelCloseTab {
+  position: absolute;
+  left: -20px;
+  top: 10px;
+  z-index: 1; // ensures stacked on top of map (tested with maplibre)
+  border: solid thin orange;
+}

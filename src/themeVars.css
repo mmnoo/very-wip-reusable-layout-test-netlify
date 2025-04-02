@@ -6,6 +6,8 @@
   --spk-spacing-3: 8px;
   --spk-spacing-4: 16px;
   --spk-spacing-5: 24px;
+  --spk-spacing-6: 32px;
+  --spk-spacing-7: 40px;
 
   --spk-color-grey-1: #f0f0f0;
   --spk-color-grey-2: #e0e0e0;
@@ -21,4 +23,5 @@
   --spk-typography-color-deemphasized: var(--spk-color-grey-9);
 
   --spk-button-tiny-font-size: 1rem;
+  --spk-button-background-color-secondary: lightblue;
 }

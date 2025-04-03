@@ -72,7 +72,7 @@ function App() {
             }
             mainPanelContents={
               <>
-                Optional left Panel
+                Optional left Panel PR content
                 <br />
                 <button
                   onClick={() => setIsLeftSubpanelOpen(!isLeftSubpanelOpen)}

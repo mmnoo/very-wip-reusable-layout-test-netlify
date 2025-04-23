@@ -1,3 +1,12 @@
+@mixin panelResizerTarget {
+  all: unset;
+  width: 5px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  cursor: col-resize;
+}
+
 .layoutPanelsWrapper {
   border: solid thin red;
   height: 100%;
@@ -5,7 +14,6 @@
   justify-content: space-between;
 
   & > :nth-child(2) {
-    border: solid thick black;
     flex-grow: 1;
   }
 }
@@ -13,6 +21,7 @@
   transition: 1s ease-in-out;
   box-sizing: border-box;
   position: relative;
+  border: dashed thin green;
 }
 .panelCloseButton {
   all: unset;
@@ -32,4 +41,13 @@
   top: 10px;
   z-index: 1; // ensures stacked on top of map (tested with maplibre)
   border: solid thin orange;
+}
+
+.leftPanelResizerTarget {
+  @include panelResizerTarget;
+  right: 0;
+}
+.rightPanelResizerTarget {
+  @include panelResizerTarget;
+  left: 0;
 }

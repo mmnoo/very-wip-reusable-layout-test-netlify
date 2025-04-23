@@ -1,49 +1,85 @@
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  // MouseEvent,
+  ReactNode,
+  SetStateAction,
+  useRef,
+  useState,
+} from "react";
 import layoutPanelStyles from "./LayoutPanels.module.scss";
+import { dragToResizePanelWidth } from "../../library/dom/dragToResizePanelWidth";
 
 export interface LayoutPanelsProps {
-  leftPanelContent?: ReactNode;
-  rightPanelContent?: ReactNode;
-  isLeftPanelToggelable?: boolean;
-  isRightPanelToggelable?: boolean;
   children: ReactNode;
-  leftPanelClassName?: string;
-  leftPanelWidth?: string;
-  rightPanelWidth?: string;
   isLeftPanelOpen?: boolean;
+  isLeftPanelResizable?: boolean;
+  isLeftPanelToggelable?: boolean;
+  isRightPanelResizable?: boolean;
+  isRightPanelToggelable?: boolean;
+  leftPanelClassName?: string;
+  leftPanelContent?: ReactNode;
+  leftPanelWidth?: string;
+  rightPanelContent?: ReactNode;
+  rightPanelWidth?: string;
   setIsLeftPanelOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const LayoutPanels = ({
-  leftPanelContent,
-  rightPanelContent,
-  leftPanelWidth = "400px", // what happens if we also have a css var for this? Should it be a prop or css?
-  rightPanelWidth = "400px",
-  isRightPanelToggelable = true,
-  isLeftPanelToggelable = true,
-  leftPanelClassName,
   children,
   isLeftPanelOpen = undefined,
+  isLeftPanelResizable = false,
+  isLeftPanelToggelable = true,
+  isRightPanelResizable = false,
+  isRightPanelToggelable = true,
+  leftPanelClassName,
+  leftPanelContent,
+  leftPanelWidth = "400px", // what happens if we also have a css var for this? Should it be a prop or css?
+  rightPanelContent,
+  rightPanelWidth = "400px",
   setIsLeftPanelOpen = undefined,
 }: LayoutPanelsProps) => {
   // todo: validate props that need to go together isLeftPAnelOpen, setIsLeftPanelOpen, throw errors if one not present
   // todo: make it possible for right panel open state to be controlled by parent
   const [isLeftPanelOpenInternal, setIsLeftPanelOpenInternal] = useState(true);
-  const isLeftPanelOpenToUse =
-    isLeftPanelOpen !== null && isLeftPanelOpen !== undefined
-      ? isLeftPanelOpen
-      : isLeftPanelOpenInternal;
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [leftPanelResizableWidth, setLeftPanelResizableWidth] =
+    useState(leftPanelWidth);
+  const [rightPanelResizableWidth, setRightPanelResizableWidth] =
+    useState(rightPanelWidth);
+  const leftPanelRef = useRef<HTMLDivElement>(null);
+  const rightPanelRef = useRef<HTMLDivElement>(null);
 
+  const isLeftPanelOpenToUse = isLeftPanelOpen ?? isLeftPanelOpenInternal;
   const setIsLeftPanelOpenToUse =
     setIsLeftPanelOpen ?? setIsLeftPanelOpenInternal;
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
   const leftPanelDynamicStyles = {
-    width: leftPanelWidth,
-    marginLeft: isLeftPanelOpenToUse ? "0px" : `-${leftPanelWidth}`,
+    width: leftPanelResizableWidth,
+    marginLeft: isLeftPanelOpenToUse ? "0px" : `-${leftPanelResizableWidth}`,
   };
   const rightPanelDynamicStyles = {
-    width: rightPanelWidth,
-    marginRight: isRightPanelOpen ? "0px" : `-${rightPanelWidth}`,
+    width: rightPanelResizableWidth,
+    marginRight: isRightPanelOpen ? "0px" : `-${rightPanelResizableWidth}`,
+  };
+
+  const dragToResizeLeftPanel = (
+    event: React.MouseEvent | React.TouchEvent
+  ) => {
+    dragToResizePanelWidth({
+      event,
+      divRef: leftPanelRef,
+      onMoveEnd: setLeftPanelResizableWidth,
+    });
+  };
+
+  const dragToResizeRightPanel = (
+    event: React.MouseEvent | React.TouchEvent
+  ) => {
+    dragToResizePanelWidth({
+      event,
+      divRef: rightPanelRef,
+      onMoveEnd: setRightPanelResizableWidth,
+      isLeftEdgeResizeTarget: true,
+    });
   };
 
   return (
@@ -52,6 +88,7 @@ export const LayoutPanels = ({
         <div
           className={`${layoutPanelStyles.panel} ${leftPanelClassName}`}
           style={leftPanelDynamicStyles}
+          ref={leftPanelRef}
         >
           {isLeftPanelToggelable ? (
             <div className={layoutPanelStyles.leftPanelCloseTab}>
@@ -65,6 +102,13 @@ export const LayoutPanels = ({
           ) : null}
 
           {leftPanelContent}
+          {isLeftPanelResizable ? (
+            <button
+              className={layoutPanelStyles.leftPanelResizerTarget}
+              onMouseDown={dragToResizeLeftPanel}
+              onTouchStart={dragToResizeLeftPanel}
+            />
+          ) : null}
         </div>
       ) : null}
 
@@ -73,6 +117,7 @@ export const LayoutPanels = ({
         <div
           className={layoutPanelStyles.panel}
           style={rightPanelDynamicStyles}
+          ref={rightPanelRef}
         >
           {isRightPanelToggelable ? (
             <div className={layoutPanelStyles.rightPanelCloseTab}>
@@ -85,6 +130,13 @@ export const LayoutPanels = ({
             </div>
           ) : null}
           {rightPanelContent}
+          {isRightPanelResizable ? (
+            <button
+              className={layoutPanelStyles.rightPanelResizerTarget}
+              onMouseDown={dragToResizeRightPanel}
+              onTouchStart={dragToResizeRightPanel}
+            />
+          ) : null}
         </div>
       ) : null}
     </div>

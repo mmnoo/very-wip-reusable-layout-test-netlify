@@ -2,14 +2,14 @@ import { LayoutApp } from "./couldBeSharedComponents/LayoutApp/LayoutApp";
 import { LayoutPanels } from "./couldBeSharedComponents/LayoutPanels/LayoutPanels";
 
 import styles from "./App.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PanelContentsWithSubpanel } from "./PanelContentsWithSubpanel/PanelContentsWithSubpanel";
 import { useCloseSubpanelWhenParentPanelCloses } from "./PanelContentsWithSubpanel/useCloseSubpanelWhenParentPanelCloses";
 import { Map } from "./couldBeSharedComponents/Map/Map";
 import { useMap } from "./couldBeSharedComponents/Map/useMap";
 
 function App() {
-  const [isLeftPanelOpenOverride, setIsLeftPanelOpenOverride] = useState(false);
+  const [isLeftPanelOpenOverride, setIsLeftPanelOpenOverride] = useState(true);
   const [isLeftSubpanelOpen, setIsLeftSubpanelOpen] = useState(true);
 
   // maybe we want the subpanel to close when the parent panel closes?
@@ -29,31 +29,31 @@ function App() {
     // call a map resize handler here if we need to respond to that
   };
 
-  const { mapContainer, mapRef, isMapLoaded } = useMap({
-    center: [-122.4194, 37.7749],
+  // const { mapContainer } = useMap({
+  //   center: [-122.4194, 37.7749],
 
-    zoom: 10,
-  });
+  //   zoom: 10,
+  // });
 
-  useEffect(
-    function exampleMapResizeHandler() {
-      if (!isMapLoaded && !mapRef.current) {
-        // this check is a bit redundant, but isMapLoaded will trigger the effect.
-        // checking for mapRef.current as well is technically correct and doesnt hurt
-        return;
-      }
-      const mapInstance = mapRef.current;
-      const handleMapResize = () => {
-        console.log("resize event");
-      };
-      mapInstance?.on("resize", handleMapResize);
+  // useEffect(
+  //   function exampleMapResizeHandler() {
+  //     if (!isMapLoaded && !mapRef.current) {
+  //       // this check is a bit redundant, but isMapLoaded will trigger the effect.
+  //       // checking for mapRef.current as well is technically correct and doesnt hurt
+  //       return;
+  //     }
+  //     const mapInstance = mapRef.current;
+  //     const handleMapResize = () => {
+  //       console.log("resize event");
+  //     };
+  //     mapInstance?.on("resize", handleMapResize);
 
-      return () => {
-        mapInstance?.off("resize", handleMapResize);
-      };
-    },
-    [isMapLoaded, mapRef]
-  );
+  //     return () => {
+  //       mapInstance?.off("resize", handleMapResize);
+  //     };
+  //   },
+  //   [isMapLoaded, mapRef]
+  // );
 
   return (
     <LayoutApp headerContent={<>header</>} footerContent={<>footer</>}>
@@ -97,9 +97,11 @@ function App() {
         setIsLeftPanelOpen={customHandleLeftPanelToggle}
         isLeftPanelOpen={isLeftPanelOpenOverride}
         leftPanelClassName={styles.leftPanelOverride} //override left panel styles to show a possible approach to style overriding
+        isLeftPanelResizable={true}
+        isRightPanelResizable={true}
       >
-        <div>
-          <Map
+        <div style={{ backgroundColor: "magenta" }}>
+          {/* <Map
             mapContainer={mapContainer}
             legend={<div style={{ backgroundColor: "white" }}> legend</div>}
             additionalControls={
@@ -110,7 +112,7 @@ function App() {
                 <button>container</button>
               </>
             }
-          />
+          /> */}
         </div>
       </LayoutPanels>
     </LayoutApp>

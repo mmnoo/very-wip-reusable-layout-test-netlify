@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { LayoutPanels } from "../couldBeSharedComponents/LayoutPanels/LayoutPanels";
 import { PanelContentsWithSubpanel } from "../PanelContentsWithSubpanel/PanelContentsWithSubpanel";
 import { useCloseSubpanelWhenParentPanelCloses } from "../PanelContentsWithSubpanel/useCloseSubpanelWhenParentPanelCloses";
-import styles from "./LayoutPanel.stories.module.scss";
 import { LayoutApp } from "../couldBeSharedComponents/LayoutApp/LayoutApp";
+import storyStyles from "./LayoutPanel.stories.module.scss";
 
 const meta: Meta<typeof LayoutPanels> = {
   title: "Components/LayoutPanels",
@@ -114,17 +114,76 @@ export const Resizable: Story = {
   },
 };
 
-export const CustomWidth: Story = {
+export const CustomPanelStyles: Story = {
   args: {
     leftPanelContent: <LeftPanelContent />,
     rightPanelContent: <RightPanelContent />,
     children: <MainContent />,
     isLeftPanelResizable: true,
     isRightPanelResizable: true,
-    leftPanelClassName: styles.leftPanelOverride,
+    leftPanelClassName: storyStyles.leftPanelOverride,
+    rightPanelClassName: storyStyles.rightPanelOverride,
   },
 };
 
 export const WithSubpanel: Story = {
   render: () => <SubpanelDemo />,
+};
+
+const CustomToggleButton = ({
+  isOpen,
+  onClick,
+}: {
+  isOpen: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    style={{
+      background: isOpen ? "magenta" : "cyan",
+      color: "white",
+      border: "none",
+      padding: "5px",
+      cursor: "pointer",
+    }}
+    onClick={onClick}
+  >
+    {isOpen ? "x" : "o"}
+  </button>
+);
+
+const CustomToggleButtonsDemo = () => {
+  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+
+  return (
+    <LayoutApp>
+      <LayoutPanels
+        leftPanelContent={<LeftPanelContent />}
+        rightPanelContent={<RightPanelContent />}
+        children={<MainContent />}
+        isLeftPanelOpen={isLeftPanelOpen}
+        isRightPanelOpen={isRightPanelOpen}
+        setIsLeftPanelOpen={setIsLeftPanelOpen}
+        setIsRightPanelOpen={setIsRightPanelOpen}
+        leftPanelToggleButton={
+          <CustomToggleButton
+            isOpen={isLeftPanelOpen}
+            onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
+          />
+        }
+        rightPanelToggleButton={
+          <CustomToggleButton
+            isOpen={isRightPanelOpen}
+            onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
+          />
+        }
+        isLeftPanelResizable={true}
+        isRightPanelResizable={true}
+      />
+    </LayoutApp>
+  );
+};
+
+export const WithCustomToggleButtons: Story = {
+  render: () => <CustomToggleButtonsDemo />,
 };

@@ -71,7 +71,6 @@ function App() {
                 </button>
               </>
             }
-            subpanelWidth="200px"
           ></PanelContentsWithSubpanel>
         }
         rightPanelContent={<>Optional right panel</>}

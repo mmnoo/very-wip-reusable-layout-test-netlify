@@ -1,5 +1,7 @@
 import {
+  cloneElement,
   Dispatch,
+  ReactElement,
   // MouseEvent,
   ReactNode,
   SetStateAction,
@@ -16,12 +18,17 @@ export interface LayoutPanelsProps {
   isLeftPanelOpen?: boolean;
   isLeftPanelResizable?: boolean;
   isLeftPanelToggelable?: boolean;
+  isRightPanelOpen?: boolean;
   isRightPanelResizable?: boolean;
   isRightPanelToggelable?: boolean;
   leftPanelClassName?: string;
+  rightPanelClassName?: string;
   leftPanelContent?: ReactNode;
+  leftPanelToggleButton?: ReactElement;
   rightPanelContent?: ReactNode;
+  rightPanelToggleButton?: ReactElement;
   setIsLeftPanelOpen?: Dispatch<SetStateAction<boolean>>;
+  setIsRightPanelOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const LayoutPanels = ({
@@ -29,27 +36,36 @@ export const LayoutPanels = ({
   isLeftPanelOpen = undefined,
   isLeftPanelResizable = false,
   isLeftPanelToggelable = true,
+  isRightPanelOpen = undefined,
   isRightPanelResizable = false,
   isRightPanelToggelable = true,
-  leftPanelClassName,
-  leftPanelContent,
-  rightPanelContent,
+  leftPanelClassName = undefined,
+  rightPanelClassName = undefined,
+  leftPanelContent = undefined,
+  leftPanelToggleButton = undefined,
+  rightPanelContent = undefined,
+  rightPanelToggleButton = undefined,
   setIsLeftPanelOpen = undefined,
+  setIsRightPanelOpen = undefined,
 }: LayoutPanelsProps) => {
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
   // todo: validate props that need to go together isLeftPAnelOpen, setIsLeftPanelOpen, throw errors if one not present
   // todo: make it possible for right panel open state to be controlled by parent
   const [isLeftPanelOpenInternal, setIsLeftPanelOpenInternal] = useState(true);
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [isRightPanelOpenInternal, setIsRightPanelOpenInternal] =
+    useState(true);
   const [leftPanelResizableWidth, setLeftPanelResizableWidth] =
-    useState<string>();
+    useState<string>("300px"); // gets overriden with CSS, but best to have a default value
   const [rightPanelResizableWidth, setRightPanelResizableWidth] =
-    useState<string>();
+    useState<string>("300px"); // gets overriden with CSS, but best to have a default value
 
   const isLeftPanelOpenToUse = isLeftPanelOpen ?? isLeftPanelOpenInternal;
+  const isRightPanelOpenToUse = isRightPanelOpen ?? isRightPanelOpenInternal;
   const setIsLeftPanelOpenToUse =
     setIsLeftPanelOpen ?? setIsLeftPanelOpenInternal;
+  const setIsRightPanelOpenToUse =
+    setIsRightPanelOpen ?? setIsRightPanelOpenInternal;
   const leftPanelDynamicStyles = useMemo(
     () => ({
       width: leftPanelResizableWidth,
@@ -59,13 +75,33 @@ export const LayoutPanels = ({
   );
   const rightPanelDynamicStyles = {
     width: rightPanelResizableWidth,
-    marginRight: isRightPanelOpen ? "0px" : `-${rightPanelResizableWidth}`,
+    marginRight: isRightPanelOpenToUse ? "0px" : `-${rightPanelResizableWidth}`,
   };
 
-  useEffect(function initialzeResizableWidths() {
-    setLeftPanelResizableWidth(`${leftPanelRef.current?.offsetWidth}px`);
-    setRightPanelResizableWidth(`${rightPanelRef.current?.offsetWidth}px`);
-  }, []);
+  useEffect(
+    function initializeResizableWidths() {
+      const rafId = requestAnimationFrame(() => {
+        if (leftPanelRef.current) {
+          const width = leftPanelRef.current.offsetWidth;
+          if (width > 0) {
+            setLeftPanelResizableWidth(`${width}px`);
+          }
+        }
+        if (rightPanelRef.current) {
+          const width = rightPanelRef.current.offsetWidth;
+          if (width > 0) {
+            setRightPanelResizableWidth(`${width}px`);
+          }
+        }
+      });
+
+      return () => {
+        cancelAnimationFrame(rafId);
+      };
+    },
+    [leftPanelContent, rightPanelContent]
+  );
+
   const dragToResizeLeftPanel = (
     event: React.MouseEvent | React.TouchEvent
   ) => {
@@ -86,6 +122,37 @@ export const LayoutPanels = ({
       isLeftEdgeResizeTarget: true,
     });
   };
+  const handleRightToggleButtonClick = () =>
+    setIsRightPanelOpenToUse((previous) => !previous);
+  const handleLeftToggleButtonClick = () =>
+    setIsLeftPanelOpenToUse((previous) => !previous);
+  const internalRightPanelCloseButton = (
+    <button
+      className={layoutPanelStyles.panelCloseButton}
+      onClick={handleRightToggleButtonClick}
+    >
+      {isRightPanelOpenToUse ? ">" : "<"}
+    </button>
+  );
+  const internalLeftPanelCloseButton = (
+    <button
+      className={layoutPanelStyles.panelCloseButton}
+      onClick={handleLeftToggleButtonClick}
+    >
+      {isLeftPanelOpenToUse ? "<" : ">"}
+    </button>
+  );
+  const rightPanelButtonToUse = rightPanelToggleButton
+    ? cloneElement(rightPanelToggleButton, {
+        onClick: handleRightToggleButtonClick,
+      })
+    : internalRightPanelCloseButton;
+
+  const leftPanelButtonToUse = leftPanelToggleButton
+    ? cloneElement(leftPanelToggleButton, {
+        onClick: handleLeftToggleButtonClick,
+      })
+    : internalLeftPanelCloseButton;
 
   return (
     <div className={layoutPanelStyles.layoutPanelsWrapper}>
@@ -97,12 +164,7 @@ export const LayoutPanels = ({
         >
           {isLeftPanelToggelable ? (
             <div className={layoutPanelStyles.leftPanelCloseTab}>
-              <button
-                className={layoutPanelStyles.panelCloseButton}
-                onClick={() => setIsLeftPanelOpenToUse((previous) => !previous)}
-              >
-                {isLeftPanelOpenToUse ? "<" : ">"}
-              </button>
+              {leftPanelButtonToUse}
             </div>
           ) : null}
           {leftPanelContent}
@@ -119,18 +181,13 @@ export const LayoutPanels = ({
 
       {rightPanelContent ? (
         <div
-          className={layoutPanelStyles.panel}
+          className={`${layoutPanelStyles.panel} ${rightPanelClassName}`}
           style={rightPanelDynamicStyles}
           ref={rightPanelRef}
         >
           {isRightPanelToggelable ? (
             <div className={layoutPanelStyles.rightPanelCloseTab}>
-              <button
-                className={layoutPanelStyles.panelCloseButton}
-                onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
-              >
-                {isRightPanelOpen ? ">" : "<"}
-              </button>
+              {rightPanelButtonToUse}
             </div>
           ) : null}
           {rightPanelContent}

@@ -30,6 +30,7 @@
   all: unset;
   background-color: var(--spk-button-background-color-secondary, #666);
   width: 20px;
+  cursor: pointer;
 }
 .leftPanelCloseTab {
   position: absolute;

@@ -26,37 +26,19 @@ function App() {
     );
 
     setIsLeftPanelOpenOverride((previous) => !previous);
-    // call a map resize handler here if we need to respond to that
   };
 
-  // const { mapContainer } = useMap({
-  //   center: [-122.4194, 37.7749],
+  const { mapContainer } = useMap({
+    center: [-122.4194, 37.7749],
 
-  //   zoom: 10,
-  // });
-
-  // useEffect(
-  //   function exampleMapResizeHandler() {
-  //     if (!isMapLoaded && !mapRef.current) {
-  //       // this check is a bit redundant, but isMapLoaded will trigger the effect.
-  //       // checking for mapRef.current as well is technically correct and doesnt hurt
-  //       return;
-  //     }
-  //     const mapInstance = mapRef.current;
-  //     const handleMapResize = () => {
-  //       console.log("resize event");
-  //     };
-  //     mapInstance?.on("resize", handleMapResize);
-
-  //     return () => {
-  //       mapInstance?.off("resize", handleMapResize);
-  //     };
-  //   },
-  //   [isMapLoaded, mapRef]
-  // );
+    zoom: 10,
+  });
 
   return (
-    <LayoutApp headerContent={<>header</>} footerContent={<>footer</>}>
+    <LayoutApp
+      headerContent={<>header (out of scope )</>}
+      footerContent={<>footer (out of scope)</>}
+    >
       <LayoutPanels
         leftPanelContent={
           <PanelContentsWithSubpanel
@@ -93,27 +75,24 @@ function App() {
           ></PanelContentsWithSubpanel>
         }
         rightPanelContent={<>Optional right panel</>}
-        leftPanelWidth="300px"
         setIsLeftPanelOpen={customHandleLeftPanelToggle}
         isLeftPanelOpen={isLeftPanelOpenOverride}
-        leftPanelClassName={styles.leftPanelOverride} //override left panel styles to show a possible approach to style overriding
+        leftPanelClassName={styles.leftPanelOverride}
         isLeftPanelResizable={true}
         isRightPanelResizable={true}
       >
-        <div style={{ backgroundColor: "magenta" }}>
-          {/* <Map
-            mapContainer={mapContainer}
-            legend={<div style={{ backgroundColor: "white" }}> legend</div>}
-            additionalControls={
-              <>
-                <button>custom</button>
-                <button>map</button>
-                <button>control</button>
-                <button>container</button>
-              </>
-            }
-          /> */}
-        </div>
+        <Map
+          mapContainer={mapContainer}
+          legend={<div style={{ backgroundColor: "white" }}> legend</div>}
+          additionalControls={
+            <>
+              <button>custom</button>
+              <button>map</button>
+              <button>control</button>
+              <button>container</button>
+            </>
+          }
+        />
       </LayoutPanels>
     </LayoutApp>
   );

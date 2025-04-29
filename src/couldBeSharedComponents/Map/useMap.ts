@@ -26,11 +26,6 @@ export const useMap = (config?: { center?: LngLatLike; zoom?: number }) => {
         center: center,
         zoom: zoom,
       });
-
-      // mapRef.current.addControl(new NavigationControl());
-      // mapRef.current.addControl(new FullscreenControl());
-      // probably add controls in parent, not reusable component
-      // better yet use custom controls if also using 'additionalControls' so they match in button style.
     },
     [initialCenter, initialZoom]
   );

@@ -10,24 +10,25 @@
 }
 
 .layoutPanelsWrapper {
-  border: solid thin red;
   height: 100%;
   display: flex;
   justify-content: space-between;
-
-  & > :nth-child(2) {
-    flex-grow: 1;
-  }
+}
+.centerSection {
+  flex-grow: 1;
 }
 .panel {
   transition: 1s ease-in-out;
   box-sizing: border-box;
   position: relative;
   border: dashed thin green;
+  width: 300px;
+  box-sizing: border-box;
 }
+
 .panelCloseButton {
   all: unset;
-  background-color: var(--spk-button-background-color-secondary);
+  background-color: var(--spk-button-background-color-secondary, #666);
   width: 20px;
 }
 .leftPanelCloseTab {

@@ -6,10 +6,10 @@
 .subpanelWrapper {
   border: solid thin cyan;
   height: 100%;
-  width: 100%;
+  width: 200px;
   position: absolute;
   right: calc(
-    -100% - var(--spk-spacing-5)
+    -100% - var(--spk-spacing-5, 24px)
   ); // make sure changes here get reflected in component code for widthStylesOverride
   background: white;
   box-sizing: border-box;

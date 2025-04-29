@@ -3,6 +3,8 @@ import {
   // MouseEvent,
   ReactNode,
   SetStateAction,
+  useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -18,9 +20,7 @@ export interface LayoutPanelsProps {
   isRightPanelToggelable?: boolean;
   leftPanelClassName?: string;
   leftPanelContent?: ReactNode;
-  leftPanelWidth?: string;
   rightPanelContent?: ReactNode;
-  rightPanelWidth?: string;
   setIsLeftPanelOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -33,34 +33,39 @@ export const LayoutPanels = ({
   isRightPanelToggelable = true,
   leftPanelClassName,
   leftPanelContent,
-  leftPanelWidth = "400px", // what happens if we also have a css var for this? Should it be a prop or css?
   rightPanelContent,
-  rightPanelWidth = "400px",
   setIsLeftPanelOpen = undefined,
 }: LayoutPanelsProps) => {
+  const leftPanelRef = useRef<HTMLDivElement>(null);
+  const rightPanelRef = useRef<HTMLDivElement>(null);
   // todo: validate props that need to go together isLeftPAnelOpen, setIsLeftPanelOpen, throw errors if one not present
   // todo: make it possible for right panel open state to be controlled by parent
   const [isLeftPanelOpenInternal, setIsLeftPanelOpenInternal] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
   const [leftPanelResizableWidth, setLeftPanelResizableWidth] =
-    useState(leftPanelWidth);
+    useState<string>();
   const [rightPanelResizableWidth, setRightPanelResizableWidth] =
-    useState(rightPanelWidth);
-  const leftPanelRef = useRef<HTMLDivElement>(null);
-  const rightPanelRef = useRef<HTMLDivElement>(null);
+    useState<string>();
 
   const isLeftPanelOpenToUse = isLeftPanelOpen ?? isLeftPanelOpenInternal;
   const setIsLeftPanelOpenToUse =
     setIsLeftPanelOpen ?? setIsLeftPanelOpenInternal;
-  const leftPanelDynamicStyles = {
-    width: leftPanelResizableWidth,
-    marginLeft: isLeftPanelOpenToUse ? "0px" : `-${leftPanelResizableWidth}`,
-  };
+  const leftPanelDynamicStyles = useMemo(
+    () => ({
+      width: leftPanelResizableWidth,
+      marginLeft: isLeftPanelOpenToUse ? "0px" : `-${leftPanelResizableWidth}`,
+    }),
+    [isLeftPanelOpenToUse, leftPanelResizableWidth]
+  );
   const rightPanelDynamicStyles = {
     width: rightPanelResizableWidth,
     marginRight: isRightPanelOpen ? "0px" : `-${rightPanelResizableWidth}`,
   };
 
+  useEffect(function initialzeResizableWidths() {
+    setLeftPanelResizableWidth(`${leftPanelRef.current?.offsetWidth}px`);
+    setRightPanelResizableWidth(`${rightPanelRef.current?.offsetWidth}px`);
+  }, []);
   const dragToResizeLeftPanel = (
     event: React.MouseEvent | React.TouchEvent
   ) => {
@@ -100,7 +105,6 @@ export const LayoutPanels = ({
               </button>
             </div>
           ) : null}
-
           {leftPanelContent}
           {isLeftPanelResizable ? (
             <button
@@ -111,8 +115,8 @@ export const LayoutPanels = ({
           ) : null}
         </div>
       ) : null}
+      <div className={layoutPanelStyles.centerSection}>{children}</div>
 
-      {children}
       {rightPanelContent ? (
         <div
           className={layoutPanelStyles.panel}

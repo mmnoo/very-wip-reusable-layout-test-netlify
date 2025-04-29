@@ -1,6 +1,6 @@
 .buttonX {
   all: unset;
-  color: var(--spk-typography-color-deemphasized);
-  font-size: var(--spk-button-tiny-font-size);
-  padding: var(--spk-spacing-2);
+  color: var(--spk-typography-color-deemphasized, #666);
+  font-size: var(--spk-button-tiny-font-size, 12px);
+  padding: var(--spk-spacing-2, 8px);
 }

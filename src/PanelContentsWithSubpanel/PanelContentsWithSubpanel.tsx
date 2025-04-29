@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import panelContentsWrapperStyles from "./PanelContentsWithSubpanel.module.scss";
 import { ButtonXTopRight } from "../couldBeSharedComponents/buttons/ButtonXTopRight";
 
@@ -7,22 +7,25 @@ export const PanelContentsWithSubpanel = ({
   subpanelContents,
   isSubpanelOpen,
   setIsSubpanelOpen,
-  subpanelWidth,
 }: {
   mainPanelContents: ReactNode;
   subpanelContents: ReactNode;
   isSubpanelOpen: boolean;
   setIsSubpanelOpen: (arg: boolean) => unknown;
-  subpanelWidth?: string;
 }) => {
+  const [subpanelWidthFromCss, setSubpanelWidthFromCss] = useState<string>();
+  const subpanelRef = useRef<HTMLDivElement>(null);
   const closeSubpanel = () => {
     setIsSubpanelOpen(false);
   };
 
-  const widthStylesOverride = subpanelWidth
+  useEffect(function getSubpanelWidthValueFromCss() {
+    setSubpanelWidthFromCss(`${subpanelRef.current?.offsetWidth}px`);
+  }, []);
+  const widthStylesOverride = subpanelWidthFromCss
     ? {
-        width: subpanelWidth,
-        right: `calc(-${subpanelWidth} - var(--spk-spacing-5))`, // make sure changes here get reflected in the css
+        width: subpanelWidthFromCss,
+        right: `calc(-${subpanelWidthFromCss} - var(--spk-spacing-5, 24px))`, // make sure changes here get reflected in the css
       }
     : undefined;
   return (
@@ -31,6 +34,7 @@ export const PanelContentsWithSubpanel = ({
         <div
           className={panelContentsWrapperStyles.subpanelWrapper}
           style={widthStylesOverride}
+          ref={subpanelRef}
         >
           <ButtonXTopRight onPress={closeSubpanel} />
           {subpanelContents}

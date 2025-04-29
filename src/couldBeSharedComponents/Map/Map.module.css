@@ -9,19 +9,19 @@
 }
 .extraMapControlsContainer {
   position: absolute;
-  right: var(--spk-spacing-5);
-  top: var(--spk-spacing-2);
+  right: var(--spk-spacing-5, 24px);
+  top: var(--spk-spacing-2, 8px);
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .legendContainer {
-  padding: var(--spk-spacing-2);
+  padding: var(--spk-spacing-2, 8px);
   position: absolute;
-  right: var(--spk-spacing-3);
-  bottom: var(--spk-spacing-7);
-  background-color: var(--white);
-  border-radius: var(--radius-4);
-  box-shadow: var(--shadow-3);
+  right: var(--spk-spacing-3, 12px);
+  bottom: var(--spk-spacing-7, 28px);
+  background-color: var(--white, #fff);
+  border-radius: var(--radius-4, 4px);
+  box-shadow: var(--shadow-3, 0 0 10px 0 rgba(0, 0, 0, 0.1));
 }

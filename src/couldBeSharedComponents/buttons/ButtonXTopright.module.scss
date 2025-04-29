@@ -1,6 +1,6 @@
 .buttonXTopRight {
   position: absolute;
-  top: var(--spk-spacing-2);
-  right: var(--spk-spacing-2);
+  top: var(--spk-spacing-2, 8px);
+  right: var(--spk-spacing-2, 8px);
   border: solid thin orange;
 }

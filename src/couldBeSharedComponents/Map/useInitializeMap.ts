@@ -6,7 +6,10 @@ import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 export type MapRef = MutableRefObject<MaplibreMap | null | undefined>;
 
-export const useMap = (config?: { center?: LngLatLike; zoom?: number }) => {
+export const useInitializeMap = (config?: {
+  center?: LngLatLike;
+  zoom?: number;
+}) => {
   const { center: initialCenter, zoom: initialZoom } = config ?? {};
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -34,7 +37,7 @@ export const useMap = (config?: { center?: LngLatLike; zoom?: number }) => {
     if (!mapRef.current) return;
 
     const handleMapLoad = () => {
-      setIsMapLoaded(true);
+      setIsMapLoaded(true); // this is useful to trigger functions that use depenency arrays, since the mapRef.current cannot.
     };
 
     mapRef.current?.on("load", handleMapLoad);

@@ -6,14 +6,11 @@ import { useState } from "react";
 import { PanelContentsWithSubpanel } from "./PanelContentsWithSubpanel/PanelContentsWithSubpanel";
 import { useCloseSubpanelWhenParentPanelCloses } from "./PanelContentsWithSubpanel/useCloseSubpanelWhenParentPanelCloses";
 import { Map } from "./couldBeSharedComponents/Map/Map";
-import { useMap } from "./couldBeSharedComponents/Map/useMap";
+import { useInitializeMap } from "./couldBeSharedComponents/Map/useInitializeMap";
 
 function App() {
   const [isLeftPanelOpenOverride, setIsLeftPanelOpenOverride] = useState(true);
   const [isLeftSubpanelOpen, setIsLeftSubpanelOpen] = useState(true);
-
-  // maybe we want the subpanel to close when the parent panel closes?
-  // the subpanel component has no awareness of its parent, so we manage that externally to keep the subpanel component simple and 'stupid'
 
   useCloseSubpanelWhenParentPanelCloses({
     isLeftPanelOpen: isLeftPanelOpenOverride,
@@ -28,7 +25,7 @@ function App() {
     setIsLeftPanelOpenOverride((previous) => !previous);
   };
 
-  const { mapContainer } = useMap({
+  const { mapContainer } = useInitializeMap({
     center: [-122.4194, 37.7749],
 
     zoom: 10,
@@ -46,8 +43,8 @@ function App() {
             setIsSubpanelOpen={setIsLeftSubpanelOpen}
             subpanelContents={
               <div style={{ backgroundColor: "lightcoral", height: "100%" }}>
-                {/* not saying we should use inline styling here, but emphacizing that subpanel content styling happens by composistion 
-								we'd need to avoid the corner close button from overlapping the contents, but thats not hard so I dont expect it needs a demo
+                {/* not saying we should use inline styling in production level code, 
+								but want to note that subpanel content styling happens by composistion 
 								*/}
                 optional subpanel contents
               </div>
@@ -69,6 +66,9 @@ function App() {
                 <button onClick={customHandleLeftPanelToggle}>
                   toggle left panel with custom function from parent component
                 </button>
+                <br />
+                <br />
+                (Map-related components are out of scope for this demo)
               </>
             }
           ></PanelContentsWithSubpanel>

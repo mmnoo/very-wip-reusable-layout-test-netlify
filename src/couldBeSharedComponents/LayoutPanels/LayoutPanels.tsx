@@ -2,7 +2,6 @@ import {
   cloneElement,
   Dispatch,
   ReactElement,
-  // MouseEvent,
   ReactNode,
   SetStateAction,
   useEffect,
@@ -50,8 +49,6 @@ export const LayoutPanels = ({
 }: LayoutPanelsProps) => {
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
-  // todo: validate props that need to go together isLeftPAnelOpen, setIsLeftPanelOpen, throw errors if one not present
-  // todo: make it possible for right panel open state to be controlled by parent
   const [isLeftPanelOpenInternal, setIsLeftPanelOpenInternal] = useState(true);
   const [isRightPanelOpenInternal, setIsRightPanelOpenInternal] =
     useState(true);

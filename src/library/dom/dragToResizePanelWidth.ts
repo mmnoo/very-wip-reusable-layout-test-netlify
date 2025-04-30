@@ -11,7 +11,7 @@ export function dragToResizePanelWidth({
 }): void {
   if (event.type.includes("mouse")) {
     // for touch events we rely on css's touch-action: none.
-    // we dont call preventDefault for touch because to prevent console errors
+    // we dont call preventDefault for touch to prevent console errors
     event.preventDefault();
   }
 
@@ -52,7 +52,6 @@ export function dragToResizePanelWidth({
     onMoveEnd(newWidthPixels);
   };
 
-  // Add both mouse and touch event listeners
   window.addEventListener("mousemove", handleMove);
   window.addEventListener("touchmove", handleMove);
   window.addEventListener("mouseup", handleEnd);

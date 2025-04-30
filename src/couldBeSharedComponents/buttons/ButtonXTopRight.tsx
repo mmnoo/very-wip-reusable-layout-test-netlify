@@ -9,7 +9,7 @@ export const ButtonXTopRight = (props: ButtonProps) => {
   // Given it needs a positioned ancestor to work properly
   // this could make dx poor for external consumption/
   // better to export just the unpositioned x/close button and let the
-  // consuming app handle positioning
+  // consuming app handle positioning perhaps.
   const { className, ...restOfProps } = props;
 
   return (

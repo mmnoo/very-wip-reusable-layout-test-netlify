@@ -1,7 +1,6 @@
 import { LayoutApp } from "./couldBeSharedComponents/LayoutApp/LayoutApp";
 import { LayoutPanels } from "./couldBeSharedComponents/LayoutPanels/LayoutPanels";
 
-import styles from "./App.module.scss";
 import { useState } from "react";
 import { PanelContentsWithSubpanel } from "./PanelContentsWithSubpanel/PanelContentsWithSubpanel";
 import { useCloseSubpanelWhenParentPanelCloses } from "./PanelContentsWithSubpanel/useCloseSubpanelWhenParentPanelCloses";
@@ -76,7 +75,6 @@ function App() {
         rightPanelContent={<>Optional right panel</>}
         setIsLeftPanelOpen={customHandleLeftPanelToggle}
         isLeftPanelOpen={isLeftPanelOpenOverride}
-        leftPanelClassName={styles.leftPanelOverride}
         isLeftPanelResizable={true}
         isRightPanelResizable={true}
       >

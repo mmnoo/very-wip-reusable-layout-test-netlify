@@ -18,12 +18,11 @@
   flex-grow: 1;
 }
 .panel {
-  transition: 1s ease-in-out;
+  transition: 0.5s ease-in-out;
   box-sizing: border-box;
   position: relative;
   border: dashed thin green;
   width: 300px;
-  box-sizing: border-box;
 }
 
 .panelCloseButton {

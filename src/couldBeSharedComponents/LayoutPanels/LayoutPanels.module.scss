@@ -22,7 +22,9 @@
   box-sizing: border-box;
   position: relative;
   border: dashed thin green;
-  width: 300px;
+  width: 300px; // this may be overriden in JavaScript when the user drags to resize a panel
+  min-width: 200px;
+  max-width: 500px;
 }
 
 .panelCloseButton {

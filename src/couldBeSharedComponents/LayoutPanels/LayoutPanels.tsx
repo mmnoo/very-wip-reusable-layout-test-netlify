@@ -53,9 +53,9 @@ export const LayoutPanels = ({
   const [isRightPanelOpenInternal, setIsRightPanelOpenInternal] =
     useState(true);
   const [leftPanelResizableWidth, setLeftPanelResizableWidth] =
-    useState<string>("300px"); // gets overriden with CSS, but best to have a default value
+    useState<string>();
   const [rightPanelResizableWidth, setRightPanelResizableWidth] =
-    useState<string>("300px"); // gets overriden with CSS, but best to have a default value
+    useState<string>();
 
   const isLeftPanelOpenToUse = isLeftPanelOpen ?? isLeftPanelOpenInternal;
   const isRightPanelOpenToUse = isRightPanelOpen ?? isRightPanelOpenInternal;
@@ -63,41 +63,25 @@ export const LayoutPanels = ({
     setIsLeftPanelOpen ?? setIsLeftPanelOpenInternal;
   const setIsRightPanelOpenToUse =
     setIsRightPanelOpen ?? setIsRightPanelOpenInternal;
-  const leftPanelDynamicStyles = useMemo(
-    () => ({
-      width: leftPanelResizableWidth,
-      marginLeft: isLeftPanelOpenToUse ? "0px" : `-${leftPanelResizableWidth}`,
-    }),
-    [isLeftPanelOpenToUse, leftPanelResizableWidth]
-  );
+  const leftPanelDynamicStyles = useMemo(() => {
+    return leftPanelResizableWidth
+      ? {
+          width: leftPanelResizableWidth,
+          marginLeft: isLeftPanelOpenToUse
+            ? "0px"
+            : `-${leftPanelResizableWidth}`,
+        }
+      : undefined;
+  }, [isLeftPanelOpenToUse, leftPanelResizableWidth]);
   const rightPanelDynamicStyles = {
     width: rightPanelResizableWidth,
     marginRight: isRightPanelOpenToUse ? "0px" : `-${rightPanelResizableWidth}`,
   };
 
-  useEffect(
-    function initializeResizableWidths() {
-      const rafId = requestAnimationFrame(() => {
-        if (leftPanelRef.current) {
-          const width = leftPanelRef.current.offsetWidth;
-          if (width > 0) {
-            setLeftPanelResizableWidth(`${width}px`);
-          }
-        }
-        if (rightPanelRef.current) {
-          const width = rightPanelRef.current.offsetWidth;
-          if (width > 0) {
-            setRightPanelResizableWidth(`${width}px`);
-          }
-        }
-      });
-
-      return () => {
-        cancelAnimationFrame(rafId);
-      };
-    },
-    [leftPanelContent, rightPanelContent]
-  );
+  useEffect(function initializeResizableWidths() {
+    setLeftPanelResizableWidth(`${leftPanelRef.current?.offsetWidth}px`);
+    setRightPanelResizableWidth(`${rightPanelRef.current?.offsetWidth}px`);
+  }, []);
 
   const dragToResizeLeftPanel = (
     event: React.MouseEvent | React.TouchEvent
@@ -106,6 +90,9 @@ export const LayoutPanels = ({
       event,
       divRef: leftPanelRef,
       onMoveEnd: setLeftPanelResizableWidth,
+      closePanel: () => {
+        setIsLeftPanelOpenToUse(false);
+      },
     });
   };
 
@@ -117,6 +104,9 @@ export const LayoutPanels = ({
       divRef: rightPanelRef,
       onMoveEnd: setRightPanelResizableWidth,
       isLeftEdgeResizeTarget: true,
+      closePanel: () => {
+        setIsRightPanelOpenToUse(false);
+      },
     });
   };
   const handleRightToggleButtonClick = () =>

@@ -1,13 +1,17 @@
+import { convertCssWidthPropertyValueToPixels } from "./convertCssWidthPropertyToPixels";
+
 export function dragToResizePanelWidth({
-  event,
+  closePanel = () => {},
   divRef,
-  onMoveEnd = () => {},
+  event,
   isLeftEdgeResizeTarget = false,
+  onMoveEnd = () => {},
 }: {
-  event: React.MouseEvent | React.TouchEvent;
+  closePanel: () => void;
   divRef: React.RefObject<HTMLDivElement>;
-  onMoveEnd?: (newWidth: string) => void;
+  event: React.MouseEvent | React.TouchEvent;
   isLeftEdgeResizeTarget?: boolean;
+  onMoveEnd?: (newWidth: string) => void;
 }): void {
   if (event.type.includes("mouse")) {
     // for touch events we rely on css's touch-action: none.
@@ -16,7 +20,7 @@ export function dragToResizePanelWidth({
   }
 
   if (!divRef.current) {
-    throw new Error("divRef is not defined");
+    throw new Error("divRef.current is not defined");
   }
 
   const panelRectangle = divRef.current.getBoundingClientRect();
@@ -37,9 +41,38 @@ export function dragToResizePanelWidth({
     const newWidthRaw = isLeftEdgeResizeTarget
       ? panelRectangle.width + newX
       : panelRectangle.width - newX;
-    const newWidthWithMin = newWidthRaw < 10 ? 10 : newWidthRaw;
-    newWidthPixels = `${newWidthWithMin}px`;
+    const isNewWidthNegative = newWidthRaw < 0;
+    if (isNewWidthNegative) {
+      return;
+    }
+    const currentCssMaxWidth = convertCssWidthPropertyValueToPixels({
+      element: divRef.current!,
+      cssProperty: "max-width",
+    });
+    const currentCssMinWidth = convertCssWidthPropertyValueToPixels({
+      element: divRef.current!,
+      cssProperty: "min-width",
+    });
 
+    const isNewWidthSmallerThanMinWidth =
+      newWidthRaw < (currentCssMinWidth ?? 10);
+    const isNewWidthBiggerThanMaxWidth =
+      newWidthRaw > (currentCssMaxWidth ?? 300);
+
+    if (isNewWidthSmallerThanMinWidth || newWidthRaw < 10) {
+      // we hedge against min-width being less than 10px
+      // to leave a slice of panel width for when the panel
+      // gets opened again.
+      handleEnd();
+      closePanel();
+      return;
+    }
+    if (isNewWidthBiggerThanMaxWidth) {
+      // no need to continue on to update element width, as it is already at max width.
+      return;
+    }
+
+    newWidthPixels = `${newWidthRaw}px`;
     divRef.current!.style.width = newWidthPixels;
   };
 

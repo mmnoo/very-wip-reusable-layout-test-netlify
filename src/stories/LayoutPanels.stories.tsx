@@ -1,8 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { LayoutPanels } from "../couldBeSharedComponents/LayoutPanels/LayoutPanels";
-import { PanelContentsWithSubpanel } from "../PanelContentsWithSubpanel/PanelContentsWithSubpanel";
-import { useCloseSubpanelWhenParentPanelCloses } from "../PanelContentsWithSubpanel/useCloseSubpanelWhenParentPanelCloses";
 import { LayoutApp } from "../couldBeSharedComponents/LayoutApp/LayoutApp";
 import storyStyles from "./LayoutPanel.stories.module.scss";
 
@@ -42,41 +40,33 @@ const SubpanelDemo = () => {
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
   const [isSubpanelOpen, setIsSubpanelOpen] = useState(true);
 
-  useCloseSubpanelWhenParentPanelCloses({
-    isLeftPanelOpen,
-    setIsSubpanelOpen,
-  });
-
   return (
     <LayoutPanels
       leftPanelContent={
-        <PanelContentsWithSubpanel
-          isSubpanelOpen={isSubpanelOpen}
-          setIsSubpanelOpen={setIsSubpanelOpen}
-          subpanelContents={
-            <div style={{ height: "100%", padding: "20px" }}>
-              <h3>Subpanel Content</h3>
-              <p>This is the subpanel content that slides in from the right.</p>
-            </div>
-          }
-          mainPanelContents={
-            <div style={{ padding: "20px" }}>
-              <h2>Main Panel</h2>
-              <p>This is the main panel content.</p>
-              <button onClick={() => setIsSubpanelOpen(!isSubpanelOpen)}>
-                Toggle Subpanel
-              </button>
-              <br />
-              <br />
-            </div>
-          }
-        />
+        <div style={{ padding: "20px" }}>
+          <h2>Main Panel</h2>
+          <p>This is the main panel content.</p>
+          <button onClick={() => setIsSubpanelOpen(!isSubpanelOpen)}>
+            Toggle Subpanel
+          </button>
+          <br />
+          <br />
+        </div>
+      }
+      subpanelContent={
+        <div style={{ height: "100%", padding: "20px" }}>
+          <h3>Subpanel Content</h3>
+          <p>This is the subpanel content that slides in from the right.</p>
+        </div>
       }
       rightPanelContent={<RightPanelContent />}
-      children={<MainContent />}
       isLeftPanelOpen={isLeftPanelOpen}
       setIsLeftPanelOpen={setIsLeftPanelOpen}
-    />
+      isLeftSubpanelOpen={isSubpanelOpen}
+      setIsLeftSubpanelOpen={setIsSubpanelOpen}
+    >
+      {<MainContent />}
+    </LayoutPanels>
   );
 };
 

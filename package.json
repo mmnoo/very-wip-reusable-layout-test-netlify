@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "build-storybook": "storybook build",
     "build": "tsc -b && vite build",
+    "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "test": "vitest"
   },
   "dependencies": {
     "maplibre-gl": "^5.3.0",
@@ -35,11 +36,13 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "eslint-plugin-storybook": "^0.11.2",
     "globals": "^15.14.0",
+    "jsdom": "^26.1.0",
     "sass-embedded": "^1.83.4",
     "storybook": "8.6.0-alpha.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "vitest": "^3.1.2"
   },
   "eslintConfig": {
     "extends": [

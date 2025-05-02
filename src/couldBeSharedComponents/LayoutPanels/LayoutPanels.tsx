@@ -75,7 +75,7 @@ export const LayoutPanels = ({
     marginRight: isRightPanelOpenToUse ? "0px" : `-${rightPanelResizableWidth}`,
   };
 
-  useEffect(function initialzeResizableWidths() {
+  useEffect(function initializeResizableWidths() {
     setLeftPanelResizableWidth(`${leftPanelRef.current?.offsetWidth}px`);
     setRightPanelResizableWidth(`${rightPanelRef.current?.offsetWidth}px`);
   }, []);
@@ -87,6 +87,9 @@ export const LayoutPanels = ({
       event,
       divRef: leftPanelRef,
       onMoveEnd: setLeftPanelResizableWidth,
+      closePanel: () => {
+        setIsLeftPanelOpenToUse(false);
+      },
     });
   };
 
@@ -98,6 +101,9 @@ export const LayoutPanels = ({
       divRef: rightPanelRef,
       onMoveEnd: setRightPanelResizableWidth,
       isLeftEdgeResizeTarget: true,
+      closePanel: () => {
+        setIsRightPanelOpenToUse(false);
+      },
     });
   };
   const handleRightToggleButtonClick = () =>

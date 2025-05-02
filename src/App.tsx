@@ -17,10 +17,6 @@ function App() {
   });
 
   const customHandleLeftPanelToggle = () => {
-    console.log(
-      "control panel state from parent (and execute any side effects)"
-    );
-
     setIsLeftPanelOpenOverride((previous) => !previous);
   };
 

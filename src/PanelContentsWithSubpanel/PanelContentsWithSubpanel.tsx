@@ -1,23 +1,33 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import panelContentsWrapperStyles from "./PanelContentsWithSubpanel.module.scss";
 import { ButtonXTopRight } from "../couldBeSharedComponents/buttons/ButtonXTopRight";
+import { useCloseSubpanelWhenParentPanelCloses } from "./useCloseSubpanelWhenParentPanelCloses";
 
 export const PanelContentsWithSubpanel = ({
-  mainPanelContents,
-  subpanelContents,
-  isSubpanelOpen,
+  isLeftPanelOpen,
+  isSubpanelOpen = true,
+  mainPanelContent,
   setIsSubpanelOpen,
+  subpanelContent,
 }: {
-  mainPanelContents: ReactNode;
-  subpanelContents: ReactNode;
+  isLeftPanelOpen: boolean;
   isSubpanelOpen: boolean;
+  mainPanelContent: ReactNode;
   setIsSubpanelOpen: (arg: boolean) => unknown;
+  subpanelContent: ReactNode;
 }) => {
   const [subpanelWidthFromCss, setSubpanelWidthFromCss] = useState<string>();
+
   const subpanelRef = useRef<HTMLDivElement>(null);
+
   const closeSubpanel = () => {
     setIsSubpanelOpen(false);
   };
+
+  useCloseSubpanelWhenParentPanelCloses({
+    isLeftPanelOpen,
+    setIsSubpanelOpen,
+  });
 
   useEffect(function getSubpanelWidthValueFromCss() {
     setSubpanelWidthFromCss(`${subpanelRef.current?.offsetWidth}px`);
@@ -37,26 +47,11 @@ export const PanelContentsWithSubpanel = ({
           ref={subpanelRef}
         >
           <ButtonXTopRight onPress={closeSubpanel} />
-          {subpanelContents}
+          {subpanelContent}
         </div>
       ) : null}
 
-      {mainPanelContents}
-      {/* 
-
-			WIP thoughts:
-			
-			Should this be a standalone component, or part of other panels component (LayoutPanels)?
-			Keepin git on its own keeps the code simple with less if statements, 
-			but that means syncing closing the subpanel when the parent panel closes is hard to make a default
-			and must be handled by the consuming app (with a hook we provide for convienience), but this is worse dx. 
-
-			I can probably consume this component in the LayoutPanels directly, to at least keep the code of both separated and small... 
-			
-			
-			things to ask Erin/Al:
-				- default panel animations
-			*/}
+      {mainPanelContent}
     </div>
   );
 };

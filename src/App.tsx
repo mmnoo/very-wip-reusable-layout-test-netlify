@@ -2,7 +2,6 @@ import { LayoutApp } from "./couldBeSharedComponents/LayoutApp/LayoutApp";
 import { LayoutPanels } from "./couldBeSharedComponents/LayoutPanels/LayoutPanels";
 
 import { useState } from "react";
-import { PanelContentsWithSubpanel } from "./PanelContentsWithSubpanel/PanelContentsWithSubpanel";
 import { useCloseSubpanelWhenParentPanelCloses } from "./PanelContentsWithSubpanel/useCloseSubpanelWhenParentPanelCloses";
 import { Map } from "./couldBeSharedComponents/Map/Map";
 import { useInitializeMap } from "./couldBeSharedComponents/Map/useInitializeMap";
@@ -33,46 +32,40 @@ function App() {
     >
       <LayoutPanels
         leftPanelContent={
-          <PanelContentsWithSubpanel
-            isSubpanelOpen={isLeftSubpanelOpen}
-            setIsSubpanelOpen={setIsLeftSubpanelOpen}
-            subpanelContents={
-              <div style={{ backgroundColor: "lightcoral", height: "100%" }}>
-                {/* not saying we should use inline styling in production level code, 
+          <>
+            Optional left Panel
+            <br />
+            <button onClick={() => setIsLeftSubpanelOpen(!isLeftSubpanelOpen)}>
+              toggle subpanel
+            </button>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <button onClick={customHandleLeftPanelToggle}>
+              toggle left panel with custom function from parent component
+            </button>
+            <br />
+            <br />
+            (Map-related components are out of scope for this demo)
+          </>
+        }
+        subpanelContent={
+          <div style={{ backgroundColor: "lightcoral", height: "100%" }}>
+            {/* not saying we should use inline styling in production level code, 
 								but want to note that subpanel content styling happens by composistion 
 								*/}
-                optional subpanel contents
-              </div>
-            }
-            mainPanelContents={
-              <>
-                Optional left Panel
-                <br />
-                <button
-                  onClick={() => setIsLeftSubpanelOpen(!isLeftSubpanelOpen)}
-                >
-                  toggle subpanel
-                </button>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <button onClick={customHandleLeftPanelToggle}>
-                  toggle left panel with custom function from parent component
-                </button>
-                <br />
-                <br />
-                (Map-related components are out of scope for this demo)
-              </>
-            }
-          ></PanelContentsWithSubpanel>
+            optional subpanel contents
+          </div>
         }
         rightPanelContent={<>Optional right panel</>}
         setIsLeftPanelOpen={customHandleLeftPanelToggle}
         isLeftPanelOpen={isLeftPanelOpenOverride}
         isLeftPanelResizable={true}
         isRightPanelResizable={true}
+        isLeftSubpanelOpen={isLeftSubpanelOpen}
+        setIsLeftSubpanelOpen={setIsLeftSubpanelOpen}
       >
         <Map
           mapContainer={mapContainer}

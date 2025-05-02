@@ -5,7 +5,7 @@ export const useCloseSubpanelWhenParentPanelCloses = ({
   setIsSubpanelOpen,
 }: {
   isLeftPanelOpen: boolean;
-  setIsSubpanelOpen: (arg: boolean) => unknown;
+  setIsSubpanelOpen: (arg: boolean) => void;
 }) => {
   useEffect(() => {
     if (!isLeftPanelOpen) {

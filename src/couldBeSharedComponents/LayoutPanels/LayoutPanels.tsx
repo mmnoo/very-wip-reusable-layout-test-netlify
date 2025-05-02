@@ -11,23 +11,27 @@ import {
 } from "react";
 import layoutPanelStyles from "./LayoutPanels.module.scss";
 import { dragToResizePanelWidth } from "../../library/dom/dragToResizePanelWidth";
+import { PanelContentsWithSubpanel } from "../../PanelContentsWithSubpanel/PanelContentsWithSubpanel";
 
 export interface LayoutPanelsProps {
   children: ReactNode;
   isLeftPanelOpen?: boolean;
   isLeftPanelResizable?: boolean;
   isLeftPanelToggelable?: boolean;
+  isLeftSubpanelOpen?: boolean;
   isRightPanelOpen?: boolean;
   isRightPanelResizable?: boolean;
   isRightPanelToggelable?: boolean;
   leftPanelClassName?: string;
-  rightPanelClassName?: string;
   leftPanelContent?: ReactNode;
   leftPanelToggleButton?: ReactElement;
+  rightPanelClassName?: string;
   rightPanelContent?: ReactNode;
   rightPanelToggleButton?: ReactElement;
   setIsLeftPanelOpen?: Dispatch<SetStateAction<boolean>>;
+  setIsLeftSubpanelOpen?: Dispatch<SetStateAction<boolean>>;
   setIsRightPanelOpen?: Dispatch<SetStateAction<boolean>>;
+  subpanelContent?: ReactNode;
 }
 
 export const LayoutPanels = ({
@@ -46,10 +50,22 @@ export const LayoutPanels = ({
   rightPanelToggleButton = undefined,
   setIsLeftPanelOpen = undefined,
   setIsRightPanelOpen = undefined,
+  subpanelContent = undefined,
+  isLeftSubpanelOpen = undefined,
+  setIsLeftSubpanelOpen = undefined,
 }: LayoutPanelsProps) => {
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
+  if (
+    subpanelContent &&
+    (!setIsLeftSubpanelOpen || isLeftSubpanelOpen === undefined)
+  ) {
+    throw new Error(
+      "subpanelContent prop was provided, but setIsLeftSubpanelOpen and isLeftSubpanelOpen were not provided. This is required to control the subpanel's open state. isLeftSubpanelOpen must be initialized to a boolean value"
+    );
+  }
   const [isLeftPanelOpenInternal, setIsLeftPanelOpenInternal] = useState(true);
+
   const [isRightPanelOpenInternal, setIsRightPanelOpenInternal] =
     useState(true);
   const [leftPanelResizableWidth, setLeftPanelResizableWidth] =
@@ -154,7 +170,17 @@ export const LayoutPanels = ({
               {leftPanelButtonToUse}
             </div>
           ) : null}
-          {leftPanelContent}
+          {subpanelContent ? (
+            <PanelContentsWithSubpanel
+              isSubpanelOpen={isLeftSubpanelOpen!} // we ensure this is defined above
+              setIsSubpanelOpen={setIsLeftSubpanelOpen!} // we ensure this is defined above
+              subpanelContent={subpanelContent}
+              mainPanelContent={leftPanelContent}
+              isLeftPanelOpen={isLeftPanelOpenToUse}
+            ></PanelContentsWithSubpanel>
+          ) : (
+            leftPanelContent
+          )}
           {isLeftPanelResizable ? (
             <button
               className={layoutPanelStyles.leftPanelResizerTarget}

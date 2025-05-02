@@ -53,9 +53,9 @@ export const LayoutPanels = ({
   const [isRightPanelOpenInternal, setIsRightPanelOpenInternal] =
     useState(true);
   const [leftPanelResizableWidth, setLeftPanelResizableWidth] =
-    useState<string>("300px"); // gets overriden with CSS, but best to have a default value
+    useState<string>();
   const [rightPanelResizableWidth, setRightPanelResizableWidth] =
-    useState<string>("300px"); // gets overriden with CSS, but best to have a default value
+    useState<string>();
 
   const isLeftPanelOpenToUse = isLeftPanelOpen ?? isLeftPanelOpenInternal;
   const isRightPanelOpenToUse = isRightPanelOpen ?? isRightPanelOpenInternal;
@@ -63,13 +63,16 @@ export const LayoutPanels = ({
     setIsLeftPanelOpen ?? setIsLeftPanelOpenInternal;
   const setIsRightPanelOpenToUse =
     setIsRightPanelOpen ?? setIsRightPanelOpenInternal;
-  const leftPanelDynamicStyles = useMemo(
-    () => ({
-      width: leftPanelResizableWidth,
-      marginLeft: isLeftPanelOpenToUse ? "0px" : `-${leftPanelResizableWidth}`,
-    }),
-    [isLeftPanelOpenToUse, leftPanelResizableWidth]
-  );
+  const leftPanelDynamicStyles = useMemo(() => {
+    return leftPanelResizableWidth
+      ? {
+          width: leftPanelResizableWidth,
+          marginLeft: isLeftPanelOpenToUse
+            ? "0px"
+            : `-${leftPanelResizableWidth}`,
+        }
+      : undefined;
+  }, [isLeftPanelOpenToUse, leftPanelResizableWidth]);
   const rightPanelDynamicStyles = {
     width: rightPanelResizableWidth,
     marginRight: isRightPanelOpenToUse ? "0px" : `-${rightPanelResizableWidth}`,

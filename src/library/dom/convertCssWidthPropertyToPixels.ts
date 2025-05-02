@@ -24,11 +24,11 @@ export const convertCssWidthPropertyValueToPixels = ({
 
   const computedStyle = getComputedStyle(element);
   const cssValue = computedStyle.getPropertyValue(cssProperty).trim();
-  console.log({ cssValue });
+
   if (!cssValue) {
     throw new Error(`CSS property "${cssProperty}" is not defined or invalid.`);
   }
-  // if (!/^[0-9.]+[a-z%]+$/i.test(cssValue)) {
+
   if (!isValidCssValue(cssValue)) {
     throw new Error(`Invalid CSS value: ${cssValue}`);
   }
@@ -37,7 +37,6 @@ export const convertCssWidthPropertyValueToPixels = ({
     return parseFloat(cssValue);
   }
 
-  // const unit = RegExp(/[a-z%]+$/i).exec(cssValue)?.[0];
   const unitStartIndex = getCssWidthUnitStartIndex(cssValue);
   const doesCssValueContainUnit = unitStartIndex !== -1;
 

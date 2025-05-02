@@ -75,29 +75,10 @@ export const LayoutPanels = ({
     marginRight: isRightPanelOpenToUse ? "0px" : `-${rightPanelResizableWidth}`,
   };
 
-  useEffect(
-    function initializeResizableWidths() {
-      const rafId = requestAnimationFrame(() => {
-        if (leftPanelRef.current) {
-          const width = leftPanelRef.current.offsetWidth;
-          if (width > 0) {
-            setLeftPanelResizableWidth(`${width}px`);
-          }
-        }
-        if (rightPanelRef.current) {
-          const width = rightPanelRef.current.offsetWidth;
-          if (width > 0) {
-            setRightPanelResizableWidth(`${width}px`);
-          }
-        }
-      });
-
-      return () => {
-        cancelAnimationFrame(rafId);
-      };
-    },
-    [leftPanelContent, rightPanelContent]
-  );
+  useEffect(function initialzeResizableWidths() {
+    setLeftPanelResizableWidth(`${leftPanelRef.current?.offsetWidth}px`);
+    setRightPanelResizableWidth(`${rightPanelRef.current?.offsetWidth}px`);
+  }, []);
 
   const dragToResizeLeftPanel = (
     event: React.MouseEvent | React.TouchEvent

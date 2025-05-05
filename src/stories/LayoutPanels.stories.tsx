@@ -36,7 +36,11 @@ const MainContent = () => (
   </div>
 );
 
-const SubpanelDemo = () => {
+const SubpanelDemo = (props: {
+  leftPanelClassName?: string;
+  rightPanelClassName?: string;
+  subpanelClassName?: string;
+}) => {
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
   const [isSubpanelOpen, setIsSubpanelOpen] = useState(true);
 
@@ -56,7 +60,7 @@ const SubpanelDemo = () => {
       subpanelContent={
         <div style={{ height: "100%", padding: "20px" }}>
           <h3>Subpanel Content</h3>
-          <p>This is the subpanel content that slides in from the right.</p>
+          <p>This is the subpanel content.</p>
         </div>
       }
       rightPanelContent={<RightPanelContent />}
@@ -64,6 +68,7 @@ const SubpanelDemo = () => {
       setIsLeftPanelOpen={setIsLeftPanelOpen}
       isLeftSubpanelOpen={isSubpanelOpen}
       setIsLeftSubpanelOpen={setIsSubpanelOpen}
+      {...props}
     >
       {<MainContent />}
     </LayoutPanels>
@@ -105,15 +110,13 @@ export const Resizable: Story = {
 };
 
 export const CustomPanelStyles: Story = {
-  args: {
-    leftPanelContent: <LeftPanelContent />,
-    rightPanelContent: <RightPanelContent />,
-    children: <MainContent />,
-    isLeftPanelResizable: true,
-    isRightPanelResizable: true,
-    leftPanelClassName: storyStyles.leftPanelOverride,
-    rightPanelClassName: storyStyles.rightPanelOverride,
-  },
+  render: () => (
+    <SubpanelDemo
+      leftPanelClassName={storyStyles.leftPanelOverride}
+      rightPanelClassName={storyStyles.rightPanelOverride}
+      subpanelClassName={storyStyles.subpanelOverride}
+    />
+  ),
 };
 
 export const WithSubpanel: Story = {

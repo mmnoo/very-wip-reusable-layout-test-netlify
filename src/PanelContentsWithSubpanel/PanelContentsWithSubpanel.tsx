@@ -44,7 +44,9 @@ export const PanelContentsWithSubpanel = ({
     <div className={panelContentsWrapperStyles.panelContentsWrapper}>
       {isSubpanelOpen ? (
         <div
-          className={`${panelContentsWrapperStyles.subpanelWrapper} ${subpanelClassName}`}
+          className={`${panelContentsWrapperStyles.subpanelWrapper} ${
+            subpanelClassName ?? ""
+          }`}
           style={widthStylesOverride}
           ref={subpanelRef}
         >

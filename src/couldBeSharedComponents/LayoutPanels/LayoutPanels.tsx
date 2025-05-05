@@ -163,7 +163,7 @@ export const LayoutPanels = ({
     <div className={layoutPanelStyles.layoutPanelsWrapper}>
       {leftPanelContent ? (
         <div
-          className={`${layoutPanelStyles.panel} ${leftPanelClassName}`}
+          className={`${layoutPanelStyles.panel} ${leftPanelClassName ?? ""}`}
           style={leftPanelDynamicStyles}
           ref={leftPanelRef}
         >
@@ -197,7 +197,7 @@ export const LayoutPanels = ({
 
       {rightPanelContent ? (
         <div
-          className={`${layoutPanelStyles.panel} ${rightPanelClassName}`}
+          className={`${layoutPanelStyles.panel} ${rightPanelClassName ?? ""}`}
           style={rightPanelDynamicStyles}
           ref={rightPanelRef}
         >

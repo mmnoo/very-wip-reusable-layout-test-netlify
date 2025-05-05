@@ -36,7 +36,11 @@ const MainContent = () => (
   </div>
 );
 
-const SubpanelDemo = (props) => {
+const SubpanelDemo = (props: {
+  leftPanelClassName?: string;
+  rightPanelClassName?: string;
+  subpanelClassName?: string;
+}) => {
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
   const [isSubpanelOpen, setIsSubpanelOpen] = useState(true);
 

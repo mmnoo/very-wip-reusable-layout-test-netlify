@@ -8,12 +8,14 @@ export const PanelContentsWithSubpanel = ({
   isSubpanelOpen = true,
   mainPanelContent,
   setIsSubpanelOpen,
+  subpanelClassName = undefined,
   subpanelContent,
 }: {
   isLeftPanelOpen: boolean;
   isSubpanelOpen: boolean;
   mainPanelContent: ReactNode;
   setIsSubpanelOpen: (arg: boolean) => unknown;
+  subpanelClassName?: string;
   subpanelContent: ReactNode;
 }) => {
   const [subpanelWidthFromCss, setSubpanelWidthFromCss] = useState<string>();
@@ -42,7 +44,7 @@ export const PanelContentsWithSubpanel = ({
     <div className={panelContentsWrapperStyles.panelContentsWrapper}>
       {isSubpanelOpen ? (
         <div
-          className={panelContentsWrapperStyles.subpanelWrapper}
+          className={`${panelContentsWrapperStyles.subpanelWrapper} ${subpanelClassName}`}
           style={widthStylesOverride}
           ref={subpanelRef}
         >

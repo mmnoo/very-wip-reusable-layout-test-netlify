@@ -14,6 +14,8 @@ import { dragToResizePanelWidth } from "../../library/dom/dragToResizePanelWidth
 import { PanelContentsWithSubpanel } from "../../PanelContentsWithSubpanel/PanelContentsWithSubpanel";
 
 export interface LayoutPanelsProps {
+  subpanelClassName?: string;
+  subpanelContent?: ReactNode;
   children: ReactNode;
   isLeftPanelOpen?: boolean;
   isLeftPanelResizable?: boolean;
@@ -31,28 +33,28 @@ export interface LayoutPanelsProps {
   setIsLeftPanelOpen?: Dispatch<SetStateAction<boolean>>;
   setIsLeftSubpanelOpen?: Dispatch<SetStateAction<boolean>>;
   setIsRightPanelOpen?: Dispatch<SetStateAction<boolean>>;
-  subpanelContent?: ReactNode;
 }
 
 export const LayoutPanels = ({
+  rightPanelClassName = undefined,
+  subpanelClassName = undefined,
   children,
   isLeftPanelOpen = undefined,
   isLeftPanelResizable = false,
   isLeftPanelToggelable = true,
+  isLeftSubpanelOpen = undefined,
   isRightPanelOpen = undefined,
   isRightPanelResizable = false,
   isRightPanelToggelable = true,
   leftPanelClassName = undefined,
-  rightPanelClassName = undefined,
   leftPanelContent = undefined,
   leftPanelToggleButton = undefined,
   rightPanelContent = undefined,
   rightPanelToggleButton = undefined,
   setIsLeftPanelOpen = undefined,
+  setIsLeftSubpanelOpen = undefined,
   setIsRightPanelOpen = undefined,
   subpanelContent = undefined,
-  isLeftSubpanelOpen = undefined,
-  setIsLeftSubpanelOpen = undefined,
 }: LayoutPanelsProps) => {
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
@@ -177,6 +179,7 @@ export const LayoutPanels = ({
               subpanelContent={subpanelContent}
               mainPanelContent={leftPanelContent}
               isLeftPanelOpen={isLeftPanelOpenToUse}
+              subpanelClassName={subpanelClassName}
             ></PanelContentsWithSubpanel>
           ) : (
             leftPanelContent

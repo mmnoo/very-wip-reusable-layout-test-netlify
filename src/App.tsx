@@ -51,14 +51,7 @@ function App() {
             (Map-related components are out of scope for this demo)
           </>
         }
-        subpanelContent={
-          <div style={{ backgroundColor: "lightcoral", height: "100%" }}>
-            {/* not saying we should use inline styling in production level code, 
-								but want to note that subpanel content styling happens by composistion 
-								*/}
-            optional subpanel contents
-          </div>
-        }
+        subpanelContent={<>optional subpanel contents</>}
         rightPanelContent={<>Optional right panel</>}
         setIsLeftPanelOpen={customHandleLeftPanelToggle}
         isLeftPanelOpen={isLeftPanelOpenOverride}

@@ -10,7 +10,8 @@
     "lint": "tsc -b && eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "test": "vitest"
+    "test": "vitest",
+    "prepare": "husky"
   },
   "dependencies": {
     "maplibre-gl": "^5.3.0",
@@ -32,11 +33,14 @@
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.17.0",
+    "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "eslint-plugin-storybook": "^0.11.2",
     "globals": "^15.14.0",
+    "husky": "^9.1.7",
     "jsdom": "^26.1.0",
+    "prettier": "^3.5.3",
     "sass-embedded": "^1.83.4",
     "storybook": "8.6.0-alpha.0",
     "typescript": "~5.6.2",

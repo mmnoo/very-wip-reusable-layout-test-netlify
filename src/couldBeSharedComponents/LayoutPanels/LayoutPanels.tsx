@@ -63,7 +63,7 @@ export const LayoutPanels = ({
     (!setIsLeftSubpanelOpen || isLeftSubpanelOpen === undefined)
   ) {
     throw new Error(
-      "subpanelContent prop was provided, but setIsLeftSubpanelOpen and isLeftSubpanelOpen were not provided. This is required to control the subpanel's open state. isLeftSubpanelOpen must be initialized to a boolean value"
+      "subpanelContent prop was provided, but setIsLeftSubpanelOpen and isLeftSubpanelOpen were not provided. This is required to control the subpanel's open state. isLeftSubpanelOpen must be initialized to a boolean value",
     );
   }
   const [isLeftPanelOpenInternal, setIsLeftPanelOpenInternal] = useState(true);
@@ -102,7 +102,7 @@ export const LayoutPanels = ({
   }, []);
 
   const dragToResizeLeftPanel = (
-    event: React.MouseEvent | React.TouchEvent
+    event: React.MouseEvent | React.TouchEvent,
   ) => {
     dragToResizePanelWidth({
       event,
@@ -115,7 +115,7 @@ export const LayoutPanels = ({
   };
 
   const dragToResizeRightPanel = (
-    event: React.MouseEvent | React.TouchEvent
+    event: React.MouseEvent | React.TouchEvent,
   ) => {
     dragToResizePanelWidth({
       event,

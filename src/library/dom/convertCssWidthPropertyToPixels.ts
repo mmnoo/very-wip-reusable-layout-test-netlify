@@ -48,7 +48,7 @@ export const convertCssWidthPropertyValueToPixels = ({
       const parent = element.parentElement;
       if (!parent) {
         throw new Error(
-          "The element uses a percent unit, but is unattached to a parent to calculate a percent from."
+          "The element uses a percent unit, but is unattached to a parent to calculate a percent from.",
         );
       }
       const parentComputedStyle = getComputedStyle(parent);
@@ -61,7 +61,7 @@ export const convertCssWidthPropertyValueToPixels = ({
     }
     case "rem": {
       const rootFontSize = parseFloat(
-        getComputedStyle(document.documentElement).fontSize
+        getComputedStyle(document.documentElement).fontSize,
       );
       return number * rootFontSize;
     }
@@ -74,7 +74,7 @@ export const convertCssWidthPropertyValueToPixels = ({
     default:
       // this gets caught above but its here for clarity
       throw new Error(
-        `CSS property "${cssProperty}" is not defined or invalid.`
+        `CSS property "${cssProperty}" is not defined or invalid.`,
       );
   }
 };

@@ -101,9 +101,9 @@ describe("convertCssWidthPropertyValueToPixels", () => {
       convertCssWidthPropertyValueToPixels({
         element,
         cssProperty: "invalid-property",
-      })
+      }),
     ).toThrowError(
-      'CSS property "invalid-property" is not defined or invalid.'
+      'CSS property "invalid-property" is not defined or invalid.',
     );
   });
 
@@ -115,7 +115,7 @@ describe("convertCssWidthPropertyValueToPixels", () => {
       convertCssWidthPropertyValueToPixels({
         element,
         cssProperty: "width",
-      })
+      }),
     ).toThrowError('CSS property "width" is not defined or invalid.');
   });
 
@@ -127,7 +127,7 @@ describe("convertCssWidthPropertyValueToPixels", () => {
       convertCssWidthPropertyValueToPixels({
         element,
         cssProperty: "width",
-      })
+      }),
     ).toThrowError('CSS property "width" is not defined or invalid.');
   });
 
@@ -138,7 +138,7 @@ describe("convertCssWidthPropertyValueToPixels", () => {
       convertCssWidthPropertyValueToPixels({
         element,
         cssProperty: "width",
-      })
+      }),
     ).toThrowError('CSS property "width" is not defined or invalid.');
   });
   it("should handle missing parent element for '%' value", () => {
@@ -149,9 +149,9 @@ describe("convertCssWidthPropertyValueToPixels", () => {
       convertCssWidthPropertyValueToPixels({
         element,
         cssProperty: "width",
-      })
+      }),
     ).toThrowError(
-      "The element uses a percent unit, but is unattached to a parent to calculate a percent from."
+      "The element uses a percent unit, but is unattached to a parent to calculate a percent from.",
     );
   });
 });
